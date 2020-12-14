@@ -12,6 +12,14 @@ import java.net.Socket;
 import java.util.Arrays;
 
 public class ServerLink extends Thread {
+    private final int SEND=-1;
+    private final int RECEIVED=0;
+    private final int UNREAD=1;
+    private final int SENT=2;
+    private final int SCRIPT=3;
+    private final int READ=4;
+    private final int DELETE=5;
+
     int port;
     ServerSocket serverSocket;
     Socket socket;
@@ -26,8 +34,6 @@ public class ServerLink extends Thread {
     public void run() {
         while(true){
             try {
-                System.out.println("Server: Ready~~");
-
                 socket = serverSocket.accept();
                 out = new DataOutputStream(socket.getOutputStream());
                 in = new DataInputStream(socket.getInputStream());
@@ -36,29 +42,41 @@ public class ServerLink extends Thread {
                 int requestCode = Integer.parseInt(strReceived[0]);
                 String content = strReceived[1];
                 MailServer mailServer=new MailServer();
-                String result="1234";
-                System.out.println(Arrays.toString(strReceived));
+                String request="";
+                String response="";
+
                 switch (requestCode){
-                    case -1:
-                        result=mailServer.onSendRequest(content);
+                    case SEND:
+                        request="[Send] ";
+                        response=mailServer.onSendRequest(content);
                         break;
-                    case 0:
-                        result=mailServer.onReceiveRequest(content);
+                    case RECEIVED:
+                        request="[List Received] ";
+                        response=mailServer.onReceiveRequest(content);
                         break;
-                    case 1:
-                        result=mailServer.onUnreadRequest(content);
+                    case UNREAD:
+                        request="[List Unread] ";
+                        response=mailServer.onUnreadRequest(content);
                         break;
-                    case 2:
-                        result=mailServer.onSentRequest(content);
+                    case SENT:
+                        request="[List Sent] ";
+                        response=mailServer.onSentRequest(content);
                         break;
-                    case 3:
-                        result=mailServer.onScriptRequest(content);
+                    case SCRIPT:
+                        request="[List Script] ";
+                        response=mailServer.onScriptRequest(content);
                         break;
-                    case 5:
-                        result=mailServer.onDeleteRequest(content);
+                    case READ:
+                        request="[Read] ";
+                        response=mailServer.onReadRequest(content);
+                        break;
+                    case DELETE:
+                        request="[Delete] ";
+                        response=mailServer.onDeleteRequest(content);
                 }
-                System.out.println(result);
-                out.writeUTF(result);
+                System.out.println(request+content);
+                System.out.println("{Response} "+response);
+                out.writeUTF(response);
                 out.close();
                 in.close();
                 socket.close();

@@ -5,7 +5,7 @@ public enum MailTypes {
     UNREAD(1),
     SENT(2),
     SCRIPT(3),
-    TRASH(4),
+    READ(4),
     TO_DELETE(5);
 
     private final int code;

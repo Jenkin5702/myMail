@@ -71,7 +71,7 @@ public class DBAgent {
         for(String k: kv.keySet()){
             conditions.add(Filters.eq(k, kv.get(k)));
         }
-        collection.updateMany(Filters.and(conditions), Document.parse(after));
+        collection.updateMany(Filters.and(conditions), new Document("$set",Document.parse(after)));
         return "updated" + kv.toString() + after;
     }
 }

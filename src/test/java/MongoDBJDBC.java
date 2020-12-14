@@ -60,33 +60,33 @@ public class MongoDBJDBC{
                 System.out.println(mongoCursor.next());
             }
 
-//            // 更新文档
-//            MongoCollection<Document> collection3 = mongoDatabase.getCollection("test");
-//            System.out.println("集合 test 选择成功");
-//
-//            //更新文档   将文档中likes=100的文档修改为likes=200
-//            collection.updateMany(Filters.eq("likes", 100), new Document("$set",new Document("likes",200)));
-//            //检索查看结果
-//            FindIterable<Document> findIterable1 = collection3.find();
-//            MongoCursor<Document> mongoCursor1 = findIterable1.iterator();
-//            while(mongoCursor.hasNext()){
-//                System.out.println(mongoCursor.next());
-//            }
-//
-//            // 删除文档
-//            MongoCollection<Document> collection4 = mongoDatabase.getCollection("test");
-//            System.out.println("集合 test 选择成功");
-//
-//            //删除符合条件的第一个文档
-//            collection4.deleteOne(Filters.eq("likes", 200));
-//            //删除所有符合条件的文档
-//            collection4.deleteMany (Filters.eq("likes", 200));
-//            //检索查看结果
-//            FindIterable<Document> findIterable2 = collection4.find();
-//            MongoCursor<Document> mongoCursor2 = findIterable.iterator();
-//            while(mongoCursor.hasNext()){
-//                System.out.println(mongoCursor.next());
-//            }
+            // 更新文档
+            MongoCollection<Document> collection3 = mongoDatabase.getCollection("test");
+            System.out.println("集合 test 选择成功");
+
+            //更新文档   将文档中likes=100的文档修改为likes=200
+            collection.updateMany(Filters.eq("likes", 100), new Document("$set",new Document("likes",200)));
+            //检索查看结果
+            FindIterable<Document> findIterable1 = collection3.find();
+            MongoCursor<Document> mongoCursor1 = findIterable1.iterator();
+            while(mongoCursor.hasNext()){
+                System.out.println(mongoCursor.next());
+            }
+
+            // 删除文档
+            MongoCollection<Document> collection4 = mongoDatabase.getCollection("test");
+            System.out.println("集合 test 选择成功");
+
+            //删除符合条件的第一个文档
+            collection4.deleteOne(Filters.eq("likes", 200));
+            //删除所有符合条件的文档
+            collection4.deleteMany (Filters.eq("likes", 200));
+            //检索查看结果
+            FindIterable<Document> findIterable2 = collection4.find();
+            MongoCursor<Document> mongoCursor2 = findIterable.iterator();
+            while(mongoCursor.hasNext()){
+                System.out.println(mongoCursor.next());
+            }
 
         }catch(Exception e){
             System.err.println( e.getClass().getName() + ": " + e.getMessage() );

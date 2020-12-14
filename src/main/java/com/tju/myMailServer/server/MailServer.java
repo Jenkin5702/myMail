@@ -56,7 +56,8 @@ public class MailServer implements IServerListener {
     public String onUnreadRequest(String address) {
         HashMap<String, Object> kv=new HashMap<>();
         kv.put("to", address);
-        kv.put("status", "UNREAD");
+        kv.put("status", "SENT");
+        kv.put("read", false);
         return dbAgent.load(kv);
     }
 
@@ -73,5 +74,17 @@ public class MailServer implements IServerListener {
         kv.put("time", mail.getTime());
         kv.put("title", mail.getTitle());
         return dbAgent.delete(kv);
+    }
+
+    @Override
+    public String onReadRequest(String mailJson) {
+        Mail mail= PacketParser.parsePacket(mailJson);
+        HashMap<String, Object> kv=new HashMap<>();
+        kv.put("to", mail.getTo());
+        kv.put("from", mail.getFrom());
+        kv.put("time", mail.getTime());
+        kv.put("title", mail.getTitle());
+        mail.setRead(true);
+        return dbAgent.update(kv, mail.toString());
     }
 }

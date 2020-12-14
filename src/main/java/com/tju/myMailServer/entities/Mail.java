@@ -5,6 +5,7 @@ import com.alibaba.fastjson.*;
 
 public class Mail {
     private MailTypes status;
+    private boolean read;
     private String title;
     private String from;
     private String to;
@@ -14,6 +15,7 @@ public class Mail {
 
     public Mail(String title, String from, String to, long time, String supplement, String content) {
         this.status = MailTypes.SCRIPT;
+        this.read = false;
         this.title = title;
         this.from = from;
         this.to = to;
@@ -28,6 +30,14 @@ public class Mail {
 
     public void setStatus(MailTypes status) {
         this.status = status;
+    }
+
+    public boolean isRead() {
+        return read;
+    }
+
+    public void setRead(boolean read) {
+        this.read = read;
     }
 
     public String getTitle() {
