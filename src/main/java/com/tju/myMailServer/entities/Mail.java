@@ -8,12 +8,12 @@ public class Mail {
     private String title;
     private String from;
     private String to;
-    private Date time;
+    private long time;
     private String supplement;
     private String content;
 
-    public Mail(MailTypes mailTypes, String title, String from, String to, Date time, String supplement, String content) {
-        this.status = mailTypes;
+    public Mail(String title, String from, String to, long time, String supplement, String content) {
+        this.status = MailTypes.SCRIPT;
         this.title = title;
         this.from = from;
         this.to = to;
@@ -54,11 +54,11 @@ public class Mail {
         this.to = to;
     }
 
-    public Date getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(long time) {
         this.time = time;
     }
 

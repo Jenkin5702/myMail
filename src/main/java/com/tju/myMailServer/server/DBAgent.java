@@ -3,8 +3,10 @@ package com.tju.myMailServer.server;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import com.tju.myMailServer.entities.Mail;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -19,16 +21,16 @@ public class DBAgent {
     public DBAgent(String col){
         // 连接到 mongodb 服务
         mongoClient = new MongoClient( "127.0.0.1" , 27017 );
-        mongoDatabase = mongoClient.getDatabase("mycol");
+        mongoDatabase = mongoClient.getDatabase("mail");
         collection = mongoDatabase.getCollection(col);
     }
 
-    public boolean insert(String json) {
+    public String insert(String json) {
         Document document = Document.parse(json);
         List<Document> documents = new ArrayList<>();
         documents.add(document);
         collection.insertMany(documents);
-        return false;
+        return "inserted:" + json;
     }
 
     public String load(Map<String, Object> kv) {
@@ -36,7 +38,23 @@ public class DBAgent {
         for(String k: kv.keySet()){
             findIterable = findIterable.filter(Filters.eq(k, kv.get(k)));
         }
-        return findIterable.toString();
+        MongoCursor<Document> mongoCursor = findIterable.iterator();
+        List<String> resultSet=new ArrayList<>();
+        while(mongoCursor.hasNext()){
+            Document d=mongoCursor.next();
+            resultSet.add(
+                    new Mail(
+                            d.getString("title"),
+                            d.getString("from"),
+                            d.getString("to"),
+                            d.getLong("time"),
+                            d.getString("suppliment"),
+                            d.getString("content")
+                    ).toString()
+            );
+        }
+        System.out.println(resultSet.toString());
+        return resultSet.toString();
     }
 
     public String delete(Map<String, Object> kv) {
@@ -45,7 +63,7 @@ public class DBAgent {
             conditions.add(Filters.eq(k, kv.get(k)));
         }
         collection.deleteOne(Filters.and(conditions));
-        return null;
+        return "deleted:" + kv.toString();
     }
 
     public String update(Map<String, Object> kv, String after){
@@ -54,6 +72,6 @@ public class DBAgent {
             conditions.add(Filters.eq(k, kv.get(k)));
         }
         collection.updateMany(Filters.and(conditions), Document.parse(after));
-        return null;
+        return "updated" + kv.toString() + after;
     }
 }

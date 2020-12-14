@@ -30,26 +30,27 @@ public class MailClient implements IMailInteraction {
     }
 
     @Override
-    public List<Mail> listUnread(Contact address) {
+    public List<Mail> listUnread(String address) {
         String listStr = SocketLink.request(PacketParser.parseRequest(address, MailTypes.UNREAD));
         return PacketParser.parsePacketList(listStr);
     }
 
     @Override
-    public List<Mail> listReceived(Contact address) {
+    public List<Mail> listReceived(String address) {
         String listStr = SocketLink.request(PacketParser.parseRequest(address, MailTypes.RECEIVED));
         return PacketParser.parsePacketList(listStr);
     }
 
     @Override
-    public List<Mail> listSent(Contact address) {
+    public List<Mail> listSent(String address) {
         String listStr = SocketLink.request(PacketParser.parseRequest(address, MailTypes.SENT));
         return PacketParser.parsePacketList(listStr);
     }
 
     @Override
-    public List<Mail> listScript(Contact address) {
+    public List<Mail> listScript(String address) {
         String listStr = SocketLink.request(PacketParser.parseRequest(address, MailTypes.SCRIPT));
+        System.out.println(listStr);
         return PacketParser.parsePacketList(listStr);
     }
 }

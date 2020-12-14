@@ -9,17 +9,16 @@ import java.util.List;
 public class Test {
     public static void main(String[] args) {
         Mail mail=new Mail(
-                MailTypes.SENT,
                 "TestMail",
                 "from@test.com",
                 "to@test.com",
-                new Date(),
+                new Date().getTime(),
                 null,
                 "Hello!\tTest \ncontent."
         );
         String packet=mail.toString();
         System.out.println(packet);
-        Mail recover = JSON.parseObject(packet, Mail.class);
+        Mail recover = JSON.parseObject("{ \"_id\" : { \"$oid\" : \"5fd719d99bd68c197c28cb59\" }, \"content\" : \"script content\", \"from\" : \"from@my.com\", \"status\" : \"SCRIPT\", \"supplement\" : \"\", \"time\" : { \"$numberLong\" : \"1607932376345\" }, \"title\" : \"script\", \"to\" : \"to@my.com\" }", Mail.class);
         System.out.println(recover.toString());
         System.out.println(recover.getContent());
 

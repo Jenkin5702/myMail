@@ -21,7 +21,7 @@ public class PacketParser {
         return  "-1#" + JSON.toJSONString(mail);
     }
 
-    public static String parseRequest(Contact address, MailTypes type) {
-        return type.getCode() + "#" + address.toString();
+    public static String parseRequest(String address, MailTypes type) {
+        return type.getCode() + "#" + address;
     }
 }

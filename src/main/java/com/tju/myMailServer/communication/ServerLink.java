@@ -36,27 +36,28 @@ public class ServerLink extends Thread {
                 int requestCode = Integer.parseInt(strReceived[0]);
                 String content = strReceived[1];
                 MailServer mailServer=new MailServer();
-                String result="";
+                String result="1234";
+                System.out.println(Arrays.toString(strReceived));
                 switch (requestCode){
                     case -1:
                         result=mailServer.onSendRequest(content);
                         break;
                     case 0:
-                        result=mailServer.onReceiveRequest(PacketParser.parsePacket(content).getTo());
+                        result=mailServer.onReceiveRequest(content);
                         break;
                     case 1:
-                        result=mailServer.onUnreadRequest(PacketParser.parsePacket(content).getTo());
+                        result=mailServer.onUnreadRequest(content);
                         break;
                     case 2:
-                        result=mailServer.onSentRequest(PacketParser.parsePacket(content).getFrom());
+                        result=mailServer.onSentRequest(content);
                         break;
                     case 3:
-                        result=mailServer.onScriptRequest(PacketParser.parsePacket(content).getFrom());
+                        result=mailServer.onScriptRequest(content);
                         break;
                     case 5:
                         result=mailServer.onDeleteRequest(content);
                 }
-                System.out.println(Arrays.toString(strReceived));
+                System.out.println(result);
                 out.writeUTF(result);
                 out.close();
                 in.close();

@@ -13,8 +13,7 @@ public class MailServer implements IServerListener {
 
     @Override
     public String onSendRequest(String mailJson) {
-        dbAgent.insert(mailJson);
-        return null;
+        return dbAgent.insert(mailJson);
     }
 
     /**
