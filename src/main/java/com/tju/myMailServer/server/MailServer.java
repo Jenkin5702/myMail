@@ -87,4 +87,5 @@ public class MailServer implements IServerListener {
         mail.setRead(true);
         return dbAgent.update(kv, mail.toString());
     }
+
 }

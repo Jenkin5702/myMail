@@ -4,9 +4,7 @@ import com.tju.myMailServer.entities.MailTypes;
 import com.tju.myMailServer.server.MailServer;
 import com.tju.myMailServer.utils.PacketParser;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Arrays;
@@ -19,6 +17,8 @@ public class ServerLink extends Thread {
     private final int SCRIPT=3;
     private final int READ=4;
     private final int DELETE=5;
+    private final int UPLOAD=6;
+    private final int DOWNLOAD=7;
 
     int port;
     ServerSocket serverSocket;
@@ -73,6 +73,33 @@ public class ServerLink extends Thread {
                     case DELETE:
                         request="[Delete] ";
                         response=mailServer.onDeleteRequest(content);
+                        break;
+                    case DOWNLOAD:
+                        request="[DOWNLOAD]";
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(content)));
+                        PrintWriter out=new PrintWriter(new OutputStreamWriter(socket.getOutputStream()));
+                        String s = reader.readLine();
+                        while (s != null) {
+                            out.println(s);
+                            s = reader.readLine();
+                        }
+                        reader.close();
+                        out.close();
+                        break;
+                    case UPLOAD:
+                        request="[UPLOAD]";
+                        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(content)));
+                        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                        String x = in.readLine();
+                        while (x != null) {
+                            writer.write(x + "\n");
+                            writer.flush();
+                            x = in.readLine();
+                        }
+                        writer.close();
+                        in.close();
+                        break;
+
                 }
                 System.out.println(request+content);
                 System.out.println("{Response} "+response);
